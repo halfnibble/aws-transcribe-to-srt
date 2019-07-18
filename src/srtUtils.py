@@ -328,16 +328,16 @@ def writeSRT(phrases, filename):
 
 def getPhraseText(phrase):
 
-    length = len(phrase["words"])
+    words = phrase["words"]
 
-    out = ""
-    for i in range(0, length):
-        if re.match("[a-zA-Z0-9]", phrase["words"][i]):
-            if i > 0:
-                out += " " + phrase["words"][i]
-            else:
-                out += phrase["words"][i]
-        else:
-            out += phrase["words"][i]
+    # Handle leading punctuation marks.
+    if re.match("^\.|\?|!|,", words[0]):
+        words = words[1:]
 
-    return out
+    return (
+        " ".join(words)
+        .replace(" .", ".")
+        .replace(" ,", ",")
+        .replace(" ?", "?")
+        .replace(" !", "!")
+    )
